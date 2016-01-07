@@ -1,0 +1,8 @@
+A,knows,B
+A,knows,C
+C,knows,D
+C,knows,E
+D,knows,B
+D,knows,F
+F,knows,B
+F,knows,D
