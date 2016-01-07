@@ -17,7 +17,7 @@ type Queue struct {
 
 //
 func NewQueue() *Queue {
-	return &Queue{}
+	return &Queue{count: 0}
 }
 
 //
@@ -63,5 +63,5 @@ func (q *Queue) Peek() *Vertex {
 		return nil
 	}
 
-	return q.head
+	return q.head.data
 }

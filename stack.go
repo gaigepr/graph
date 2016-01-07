@@ -1,6 +1,8 @@
 package graph
 
-import ()
+import (
+	"errors"
+)
 
 //
 type Stack struct {
@@ -10,7 +12,7 @@ type Stack struct {
 //
 func NewStack() *Stack {
 	a := new(Stack)
-	a.s = make([]Vertex, 0)
+	a.s = make([]*Vertex, 0)
 	return a
 }
 
@@ -32,6 +34,11 @@ func (s *Stack) Pop() (*Vertex, error) {
 }
 
 //
-func (s *Stack) Emtpy() bool {
+func (s *Stack) Size() int {
+	return len(s.s)
+}
+
+//
+func (s *Stack) Empty() bool {
 	return len(s.s) == 0
 }
