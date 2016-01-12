@@ -23,12 +23,6 @@ func NewEdge(weight int) *Edge {
 	return e
 }
 
-// A library method for changing the uuid
-func (e *Edge) changeUUID(n string) {
-	uuid := uuidFromString(n)
-	e.uuid = uuid
-}
-
 // Returns the uuid of e as a UUID.
 func (e *Edge) UUID() UUID {
 	return e.uuid

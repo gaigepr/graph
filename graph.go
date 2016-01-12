@@ -6,6 +6,9 @@ import (
 	. "github.com/pborman/uuid"
 )
 
+// TODO: To make thread safe write a merge sort like routine that adds the edges or vertices such that they are in order.
+//       It may also be possuble to get map keys alphabetically.
+
 // Could make it so that the mapping of adjacency and revAdjacency is to weights.
 // Also the adj maps don't account for multiple types of Edges connecting Vertices.
 type Graph struct {
@@ -46,7 +49,7 @@ func (g *Graph) AddVertex(v *Vertex) bool {
 		if !ex {
 			log.Fatal("AddVertex: Failed to add v to g.")
 		} else {
-			log.Println("Succeeded", vert.UUIDString())
+			//log.Println("Succeeded", vert.UUIDString())
 		}
 		// Update adjacency
 		g.adjacency[vert] = make(map[*Vertex]int)
