@@ -1,6 +1,8 @@
 package graph
 
-import ()
+import (
+	"log"
+)
 
 //
 type node struct {
@@ -16,17 +18,13 @@ type Queue struct {
 }
 
 //
-func NewQueue() *Queue {
-	return &Queue{count: 0}
-}
-
-//
 func (q *Queue) Length() int {
 	return q.count
 }
 
 //
 func (q *Queue) Push(v *Vertex) {
+	log.Println("Adding vertex:", v.Type())
 	n := &node{data: v}
 
 	if q.tail == nil {

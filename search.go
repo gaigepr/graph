@@ -1,67 +1,67 @@
 package graph
 
-import ()
-
 //
-func (g *Graph) IterativeDFS(v *Vertex) (map[*Vertex]int, map[*Vertex]*Vertex) {
-	k := make(map[*Vertex]bool)    // a hash set to keep track of vertices that have been visited
-	d := make(map[*Vertex]int)     // a map of *Vertex to distance from v
-	p := make(map[*Vertex]*Vertex) // maps *Vertex to parent *Vertex
 
-	for _, vert := range g.Vertices() {
-		k[vert] = false
-		d[vert] = INFINITY
-		p[vert] = nil
-	}
+//import "log"
+//import "math"
 
-	d[v] = 0 // The distance of the start node is 0
+// The return order is (map[child]parent, map[destination]cost)
+//
+func (g *Graph) Dijkstras(root *Vertex) (map[*Vertex]*Vertex, map[*Vertex]int) {
+	ctop := make(map[*Vertex]*Vertex) // A mapping of child *Vertex to Parent *Vertex
+	vtow := make(map[*Vertex]int)     // A mapping of *Vertex to cost from root
 
-	s := NewStack()
-	s.Push(v)
-
-	for !s.Empty() {
-		c, err := s.Pop()
-		if err != nil {
-			break
-		}
-		if !k[c] {
-			k[c] = true
-			neighbors := g.Adjacent(c) // []*Vertex
-			for _, adj := range neighbors {
-				if d[adj] == INFINITY {
-					d[adj] = d[c] + 1
-					p[adj] = c
-				}
-				s.Push(adj)
-			}
-		}
-	}
-	return d, p
+	return ctop, vtow
 }
 
-//
-func (g *Graph) IterativeBFS(v *Vertex) (map[*Vertex]int, map[*Vertex]*Vertex) {
-	d := make(map[*Vertex]int)     // vertex to weight distance from root
-	p := make(map[*Vertex]*Vertex) // maps a *Vertex to its parent *Vertex in BFS terms
+// The return order is (map[child]parent, map[destination]cost)
+// This functions returns: (child -> parent *Vertex), (*Vertex -> cost).
+// This allows a user to construct the shortest path for any *Vertex from root.
+func (g *Graph) BFS(root *Vertex) (map[*Vertex]*Vertex, map[*Vertex]int) {
+	ctop := make(map[*Vertex]*Vertex) // A mapping of child *Vertex to Parent *Vertex
+	vtow := make(map[*Vertex]int)     // A mapping of *Vertex to cost from root
+	q := new(Queue)
 	for _, vert := range g.Vertices() {
-		d[vert] = INFINITY
-		p[vert] = nil
+		// Set the distance to initial values
+		vtow[vert] = -1
 	}
-	q := NewQueue()
-	d[v] = 0
-	q.Push(v)
-	for q.Length() > 0 {
-		c := q.Poll()
-		if c == nil {
-			break
-		}
-		for _, adj := range g.Adjacent(c) {
-			if d[adj] == INFINITY {
-				d[adj] = d[c] + 1
-				p[adj] = c
-				q.Push(adj)
+
+	vtow[root] = 0
+	q.Push(root)
+	for q.Length() != 0 {
+		current := q.Poll()
+		// sort adjacent!!
+		for vertex, weight := range g.Adjacent(current) {
+			if vtow[vertex] == -1 {
+				// The distance from root to current
+				// + the cost from current to vertex
+				vtow[vertex] = vtow[current] + weight
+				ctop[vertex] = current
+				q.Push(vertex)
 			}
 		}
 	}
-	return d, p
+	return ctop, vtow
+}
+
+// The return order is (map[child]parent, map[destination]cost)
+func (g *Graph) DFS(root *Vertex) { // (map[*Vertex]*Vertex, map[*Vertex]int) {
+	//ctop := make(map[*Vertex]*Vertex) // A mapping of child *Vertex to parent *Vertex
+	//vtow := make(map[*Vertex]int)     // A mapping of *Vertex to cost from root
+	discovered := make(map[*Vertex]bool)
+	s := new(Stack)
+
+	//vtow[root] = 0
+	discovered[root] = true
+	s.Push(root)
+	for !s.Empty() {
+		current, _ := s.Pop()
+		if _, seen := discovered[current]; !seen {
+			discovered[current] = true
+			for vertex, _ := range g.Adjacent(current) {
+				s.Push(vertex)
+			}
+		}
+	}
+	//return ctop, vtow
 }
